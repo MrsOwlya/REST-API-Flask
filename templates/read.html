@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Persons
+{% endblock %}
+
+{% block content %}
+    <h1>Persons list</h1>
+    {% if persons|length > 0 %}
+        {% for p in persons %}
+            <div class="alert alert-info">
+                <div class = "row">
+                    <p>{{ p.surname }} {{ p.firstname }}</p>
+                    <a href="/read/{{ p.id }}" class = "btn btn-warning mx-4">Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3>There are no persons</h3>
+    {% endif %}
+{% endblock %}

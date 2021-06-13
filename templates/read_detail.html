@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Details
+{% endblock %}
+
+{% block content %}
+    <h1>Details</h1>
+        <div class="alert alert-info">
+            <p style="font-weight: bold">{{ person.surname }} {{ person.firstname }}</p>
+            <p>Job: {{ person.job }}</p>
+            <p>Date of birth: {{ person.birth }}</p>
+            <p>Address: {{ person.address }}</p>
+            <div class="row">
+                <a href="/read/{{ person.id }}/update" class = "btn btn-warning ml-2 mr-4">Update</a>
+                <a href="/read/{{ person.id }}/delete" class = "btn btn-warning">Delete</a>
+            </div>
+        </div>
+{% endblock %}
