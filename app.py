@@ -125,5 +125,12 @@ def persons_detail_delete(id):
     return {'message': 'Person deleted'}, 204
 
 
+docs.register(persons_get)
+docs.register(persons_post)
+docs.register(persons_detail_get)
+docs.register(persons_detail_patch)
+docs.register(persons_detail_delete)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
