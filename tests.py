@@ -56,6 +56,16 @@ class TestCase(unittest.TestCase):
         assert res.status_code == 201
         assert res.get_json()['firstname'] == data['firstname']
 
+    def test_post_new_invalid_person(self):
+        data = {
+            "firstname": "UnitName",
+            "birth": "1998-04-17",
+            "job": "UnitJob",
+            "address": "UnitAddress"
+        }
+        res = self.app.post('/persons', json=data)
+        assert res.status_code == 400
+
     def test_patch_person(self):
         data = {
             "firstname": "UnitName2",

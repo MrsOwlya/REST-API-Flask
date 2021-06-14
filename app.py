@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
-from schemas import PersonSchema
+from schemas import PersonSchema, PersonPatchSchema
 from flask_apispec import use_kwargs, marshal_with
 
 app = Flask(__name__)
@@ -110,8 +110,8 @@ def persons_detail_get(id):
 
 
 @app.route('/persons/<int:id>', methods=['PATCH'])
-@use_kwargs(PersonSchema)
-@marshal_with(PersonSchema)
+@use_kwargs(PersonPatchSchema)
+@marshal_with(PersonPatchSchema)
 def persons_detail_patch(id, **kwargs):
     person = Person.query.get(id)
     if person is not None:
