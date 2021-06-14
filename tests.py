@@ -11,8 +11,8 @@ class TestCase(unittest.TestCase):
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         self.app = app.test_client()
         db.create_all()
+
         self.person1 = Person(
-            id = 1,
             firstname='TestFirstName',
             surname='TestSurname',
             birth="Fri, 17 Apr 1998 00:00:00 GMT",
@@ -20,7 +20,6 @@ class TestCase(unittest.TestCase):
             address='TestAddress'
         )
         self.person2 = Person(
-            id = 2,
             firstname='TestFirstName2',
             surname='TestSurname2',
             birth="Fri, 17 Apr 1998 00:00:00 GMT",
@@ -58,13 +57,13 @@ class TestCase(unittest.TestCase):
 
     def test_patch_person(self):
         data = {
-            'firstname': 'UnitName',
-            'surname': 'UnitSur',
+            'firstname': 'UnitName2',
+            'job': 'UnitJob2',
         }
         res = self.app.patch('/persons/1', json=data)
         assert res.status_code == 200
-        assert Person.query.get(1).firstname == 'UnitName'
-        assert Person.query.get(1).surname == 'UnitSur'
+        assert Person.query.get(1).firstname == 'UnitName2'
+        assert Person.query.get(1).job == 'UnitJob2'
 
     def test_delete_person(self):
         res = self.app.delete('/persons/2')

@@ -1,15 +1,28 @@
-from uuid import UUID
-
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_restful import http_status_message
-from sqlalchemy_serializer import SerializerMixin
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec import APISpec
+from flask_apispec.extension import FlaskApiSpec
+from schemas import PersonSchema
+from flask_apispec import use_kwargs, marshal_with
 
 app = Flask(__name__)
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/flask_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+docs = FlaskApiSpec()
+docs.init_app(app)
+app.config.update({
+    'APISPEC_SPEC': APISpec(
+        title='REST-API-Flask',
+        version='v1',
+        openapi_version='2.0',
+        plugins=[MarshmallowPlugin()]
+    ),
+    'APISPEC_SWAGGER_URL': '/swagger/'
+})
 
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,80 +76,53 @@ def create():
         return render_template('create.html')
 
 
-@app.route('/persons', methods=['POST', 'GET'])
-def persons():
-    if request.method == 'GET':
-        try:
-            persons = Person.query.order_by(Person.firstname).all()
-            serialized = []
-            for person in persons:
-                serialized.append({
-                    'id': person.id,
-                    'firstname': person.firstname,
-                    'surname': person.surname,
-                    'birth': person.birth,
-                    'job': person.job,
-                    'address': person.address
-                })
-            return jsonify(serialized), 200
-        except:
-            return jsonify({'message': 'No objects'}), 404
-
-    if request.method == 'POST':
-        new_person = Person(**request.json)
-        db.session.add(new_person)
-        db.session.commit()
-        serialized = {
-            'id': new_person.id,
-            'firstname': new_person.firstname,
-            'surname': new_person.surname,
-            'birth': new_person.birth,
-            'job': new_person.job,
-            'address': new_person.address
-        }
-        return jsonify(serialized), 201
-
-
-@app.route('/persons/<int:id>', methods=['POST', 'GET', 'PATCH', 'DELETE'])
-def persons_detail(id):
+@app.route('/persons', methods=['GET'])
+@marshal_with(PersonSchema(many=True))
+def persons_get():
     try:
-        person = Person.query.get(id)
+        allpersons = Person.query.order_by(Person.id).all()
+        return allpersons, 200
     except:
-        return jsonify({'message': 'Person does not exist'}), 404
+        return {'message': 'No objects'}, 404
 
-    if request.method == 'GET':
-        try:
-            serialized = {
-                'id': person.id,
-                'firstname': person.firstname,
-                'surname': person.surname,
-                'birth': person.birth,
-                'job': person.job,
-                'address': person.address
-            }
-            return jsonify(serialized), 200
-        except:
-            return jsonify({'message': 'Error of serialization'}), 404
 
-    if request.method == 'PATCH':
-        params = request.json
-        for key, value in params.items():
-            setattr(person, key, value)
-        db.session.commit()
-        serialized = {
-            'id': person.id,
-            'firstname': person.firstname,
-            'surname': person.surname,
-            'birth': person.birth,
-            'job': person.job,
-            'address': person.address
-        }
-        return jsonify(serialized), 200
+@app.route('/persons', methods=['POST'])
+@use_kwargs(PersonSchema)
+@marshal_with(PersonSchema)
+def persons_post(**kwargs):
+    new_person = Person(**kwargs)
+    db.session.add(new_person)
+    db.session.commit()
+    return new_person, 201
 
-    if request.method == 'DELETE':
-        db.session.delete(person)
-        db.session.commit()
-        return jsonify({'message': 'Person deleted'}), 204
+
+@app.route('/persons/<int:id>', methods=['GET'])
+@marshal_with(PersonSchema)
+def persons_detail_get(id):
+    try:
+        oneperson = Person.query.get(id)
+        return oneperson, 200
+    except:
+        return {'message': 'Person does not exist'}, 404
+
+
+@app.route('/persons/<int:id>', methods=['PATCH'])
+@use_kwargs(PersonSchema)
+@marshal_with(PersonSchema)
+def persons_detail_patch(id, **kwargs):
+    person = Person.query.get(id)
+    for key, value in kwargs.items():
+        setattr(person, key, value)
+    db.session.commit()
+    return person, 200
+
+
+@app.route('/persons/<int:id>', methods=['DELETE'])
+def persons_detail_delete(id):
+    person = Person.query.get(id)
+    db.session.delete(person)
+    db.session.commit()
+    return {'message': 'Person deleted'}, 204
 
 
 if __name__ == '__main__':
