@@ -83,26 +83,29 @@ def persons_get():
         allpersons = Person.query.order_by(Person.id).all()
         return allpersons, 200
     except:
-        return {'message': 'No objects'}, 404
+        return {'message': 'No persons'}, 404
 
 
 @app.route('/persons', methods=['POST'])
 @use_kwargs(PersonSchema)
 @marshal_with(PersonSchema)
 def persons_post(**kwargs):
-    new_person = Person(**kwargs)
-    db.session.add(new_person)
-    db.session.commit()
-    return new_person, 201
+    try:
+        new_person = Person(**kwargs)
+        db.session.add(new_person)
+        db.session.commit()
+        return new_person, 201
+    except:
+        return {'message': 'ValidationError'}, 422
 
 
 @app.route('/persons/<int:id>', methods=['GET'])
 @marshal_with(PersonSchema)
 def persons_detail_get(id):
-    try:
-        oneperson = Person.query.get(id)
-        return oneperson, 200
-    except:
+    person = Person.query.get(id)
+    if person is not None:
+        return person, 200
+    else:
         return {'message': 'Person does not exist'}, 404
 
 
@@ -111,18 +114,37 @@ def persons_detail_get(id):
 @marshal_with(PersonSchema)
 def persons_detail_patch(id, **kwargs):
     person = Person.query.get(id)
-    for key, value in kwargs.items():
-        setattr(person, key, value)
-    db.session.commit()
-    return person, 200
+    if person is not None:
+        try:
+            for key, value in kwargs.items():
+                setattr(person, key, value)
+            db.session.commit()
+            return person, 200
+        except:
+            return {'message': 'ValidationError'}, 422
+    else:
+        return {'message': 'Person does not exist'}, 404
 
 
 @app.route('/persons/<int:id>', methods=['DELETE'])
 def persons_detail_delete(id):
-    person = Person.query.get(id)
-    db.session.delete(person)
-    db.session.commit()
-    return {'message': 'Person deleted'}, 204
+    try:
+        person = Person.query.get(id)
+        db.session.delete(person)
+        db.session.commit()
+        return {'message': 'Person deleted'}, 204
+    except:
+        return {'message': 'Person does not exist'}, 404
+
+
+@app.errorhandler(422)
+def error_handler(err):
+    headers = err.data.get('headers', None)
+    messages = err.data.get('messages', ['Invalid request'])
+    if headers:
+        return jsonify({'message': messages}), 400, headers
+    else:
+        return jsonify({'message': messages}), 400
 
 
 docs.register(persons_get)

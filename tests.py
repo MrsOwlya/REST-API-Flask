@@ -38,16 +38,17 @@ class TestCase(unittest.TestCase):
     def test_get_person_by_id(self):
         res = self.app.get('/persons/1')
         assert res.status_code == 200
+        assert Person.query.get(1).firstname == 'TestFirstName'
 
     def test_get_person_not_exist(self):
-        res = self.app.get('/persons/30')
+        res = self.app.get('/persons/3000')
         assert res.status_code == 404
 
     def test_post_new_person(self):
         data = {
             "firstname": "UnitName",
             "surname": "UnitSur",
-            "birth": "Fri, 17 Apr 1998 00:00:00 GMT",
+            "birth": "1998-04-17",
             "job": "UnitJob",
             "address": "UnitAddress"
         }
@@ -57,8 +58,8 @@ class TestCase(unittest.TestCase):
 
     def test_patch_person(self):
         data = {
-            'firstname': 'UnitName2',
-            'job': 'UnitJob2',
+            "firstname": "UnitName2",
+            "job": "UnitJob2"
         }
         res = self.app.patch('/persons/1', json=data)
         assert res.status_code == 200
