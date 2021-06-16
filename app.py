@@ -24,17 +24,7 @@ app.config.update({
     'APISPEC_SWAGGER_URL': '/swagger/'
 })
 
-class Person(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(20), nullable=False)
-    surname = db.Column(db.String(20), nullable=False)
-    birth = db.Column(db.Date, nullable=False)
-    job = db.Column(db.String(20), default="Notwork", nullable=False)
-    address = db.Column(db.String(20), nullable=False)
-
-    def __repr__(self):
-        return '<Person %r>' % self.id
-
+from models import Person
 db.create_all()
 
 
@@ -42,6 +32,11 @@ db.create_all()
 @app.route('/home')
 def hello_world():
     return render_template('index.html')
+
+
+@app.route('/read')
+def read():
+    return render_template('read.html')
 
 
 @app.route('/about')
@@ -94,7 +89,11 @@ def persons_post(**kwargs):
         new_person = Person(**kwargs)
         db.session.add(new_person)
         db.session.commit()
-        return new_person, 201
+        response = jsonify()
+        response.status_code = 201
+        response.headers['Location'] = '/persons/' + str(new_person.id)
+        response.autocorrect_location_header = True
+        return response
     except:
         return {'message': 'ValidationError'}, 422
 
