@@ -31,12 +31,7 @@ db.create_all()
 @app.route('/')
 @app.route('/home')
 def hello_world():
-    return render_template('index.html')
-
-
-@app.route('/read')
-def read():
-    return render_template('read.html')
+    return render_template('main.html')
 
 
 @app.route('/about')
@@ -46,6 +41,7 @@ def about():
 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
+    persons = Person.query.order_by('firstname').all()
     if request.method == 'POST':
         firstname = request.form['firstname']
         surname = request.form['surname']
@@ -64,11 +60,10 @@ def create():
         try:
             db.session.add(person)
             db.session.commit()
-            return redirect('/')
+            return redirect('/create')
         except:
              return "Error of creating person"
-    else:
-        return render_template('create.html')
+    return render_template('Create_index.html', persons=persons)
 
 
 @app.route('/persons', methods=['GET'])

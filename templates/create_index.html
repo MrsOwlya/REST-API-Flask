@@ -26,29 +26,27 @@
     <button class="btn btn-info" id="example_2_1" onclick="document.getElementById('example_2').style.display='block'; document.getElementById('example_2_1').style.display='none'; document.getElementById('example_2_2').style.display='block';">Create new</button>
     <br>
     <br>
-{#    {% if persons|length > 0 %}#}
+    {% if persons|length > 0 %}
             <div class="alert alert-info">
                 <table>
                     <tr>
                         <th>Name</th>
                         <th>Surname</th>
-                        <th>Actions</th>
+                        <th>Birth</th>
+                        <th>Job</th>
                     </tr>
-{#                    {% for p in persons %}#}
+                      {% for p in persons %}
                         <tr>
-                            <td>{# {{ p.firstname }} #}User</td>
-                            <td>{# {{ p.surname }} #}Suruser</td>
-                            <td>
-                                <a data-method="get" class="btn btn-info">Details</a>
-                                <a data-method="patch" class="btn btn-success">Update</a>
-                                <a data-method="delete" class="btn btn-danger">Delete</a>
-                            </td>
+                            <td>{{ p.firstname }}</td>
+                            <td>{{ p.surname }}</td>
+                            <td>{{ p.birth }}</td>
+                            <td>{{ p.job }}</td>
                         </tr>
-{#                    {% endfor %}    #}
+                      {% endfor %}
                 </table>
             </div>
 
-{#    {% else %}#}
-{#        <h3>There are no persons</h3>#}
-{#    {% endif %}#}
+    {% else %}
+         <h3>There are no persons</h3>
+    {% endif %}
 {% endblock %}
