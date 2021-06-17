@@ -54,8 +54,7 @@ class TestCase(unittest.TestCase):
         }
         res = self.app.post('/persons', json=data)
         assert res.status_code == 201
-        assert res.get_json()['firstname'] == data['firstname']
-        assert res.get_json()['id'] == 3
+        assert Person.query.get(3).firstname == data['firstname']
 
     def test_post_new_invalid_person(self):
         data = {
@@ -65,7 +64,7 @@ class TestCase(unittest.TestCase):
             "address": "UnitAddress"
         }
         res = self.app.post('/persons', json=data)
-        assert res.status_code == 400
+        assert res.status_code == 422
 
     def test_patch_person(self):
         data = {

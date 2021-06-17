@@ -88,8 +88,8 @@ def persons_get():
     try:
         allpersons = Person.query.order_by(Person.id).all()
         return allpersons, 200
-    except:
-        logger.warning(f'Persons get action failed with error {Exception}')
+    except Exception as e:
+        logger.warning(f'Persons get action failed with error {e}')
         return {'message': 'No persons'}, 404
 
 
@@ -102,12 +102,11 @@ def persons_post(**kwargs):
         db.session.add(new_person)
         db.session.commit()
         response = jsonify()
-        response.status_code = 201
         response.headers['Location'] = '/persons/' + str(new_person.id)
         response.autocorrect_location_header = True
-        return response
-    except:
-        logger.warning(f'Person post action failed with error {Exception}')
+        return response, 201
+    except Exception as e:
+        logger.warning(f'Person post action failed with error {e}')
         return {'message': 'ValidationError'}, 422
 
 
@@ -118,7 +117,7 @@ def persons_detail_get(id):
     if person is not None:
         return person, 200
     else:
-        logger.warning(f'Person {id} get action failed with error {Exception}')
+        logger.warning(f'Person {id} get action failed with error {404}')
         return {'message': 'Person does not exist'}, 404
 
 
@@ -133,11 +132,11 @@ def persons_detail_patch(id, **kwargs):
                 setattr(person, key, value)
             db.session.commit()
             return person, 200
-        except:
-            logger.warning(f'Person {id} patch action failed with error {Exception}')
+        except Exception as e:
+            logger.warning(f'Person {id} patch action failed with error {e}')
             return {'message': 'ValidationError'}, 422
     else:
-        logger.warning(f'Person {id} patch action failed with error {Exception}')
+        logger.warning(f'Person {id} patch action failed with error {404}')
         return {'message': 'Person does not exist'}, 404
 
 
@@ -147,9 +146,9 @@ def persons_detail_delete(id):
         person = Person.query.get(id)
         db.session.delete(person)
         db.session.commit()
-        return 204
-    except:
-        logger.warning(f'Person {id} delete action failed with error {Exception}')
+        return '', 204
+    except Exception as e:
+        logger.warning(f'Person {id} delete action failed with error {e}')
         return jsonify({'message': 'Person does not exist'}), 404
 
 
