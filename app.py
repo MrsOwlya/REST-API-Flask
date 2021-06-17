@@ -5,6 +5,7 @@ from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from schemas import PersonSchema, PersonPatchSchema
 from flask_apispec import use_kwargs, marshal_with
+import logging
 
 app = Flask(__name__)
 app.debug = True
@@ -26,6 +27,17 @@ app.config.update({
 
 from models import Person
 db.create_all()
+
+def setup_logger():
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
+    file_handler = logging.FileHandler('log/api.log')
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    return logger
+
+logger = setup_logger()
 
 
 @app.route('/')
@@ -63,7 +75,7 @@ def create():
             return redirect('/create')
         except:
              return "Error of creating person"
-    return render_template('Create_index.html', persons=persons)
+    return render_template('create_index.html', persons=persons)
 
 
 @app.route('/persons', methods=['GET'])
@@ -73,6 +85,7 @@ def persons_get():
         allpersons = Person.query.order_by(Person.id).all()
         return allpersons, 200
     except:
+        logger.warning(f'Persons get action failed with error {Exception}')
         return {'message': 'No persons'}, 404
 
 
@@ -90,6 +103,7 @@ def persons_post(**kwargs):
         response.autocorrect_location_header = True
         return response
     except:
+        logger.warning(f'Person post action failed with error {Exception}')
         return {'message': 'ValidationError'}, 422
 
 
@@ -100,6 +114,7 @@ def persons_detail_get(id):
     if person is not None:
         return person, 200
     else:
+        logger.warning(f'Person {id} get action failed with error {Exception}')
         return {'message': 'Person does not exist'}, 404
 
 
@@ -115,8 +130,10 @@ def persons_detail_patch(id, **kwargs):
             db.session.commit()
             return person, 200
         except:
+            logger.warning(f'Person {id} patch action failed with error {Exception}')
             return {'message': 'ValidationError'}, 422
     else:
+        logger.warning(f'Person {id} patch action failed with error {Exception}')
         return {'message': 'Person does not exist'}, 404
 
 
@@ -126,20 +143,13 @@ def persons_detail_delete(id):
         person = Person.query.get(id)
         db.session.delete(person)
         db.session.commit()
-        return {'message': 'Person deleted'}, 204
+        return 204
     except:
-        return {'message': 'Person does not exist'}, 404
+        logger.warning(f'Person {id} delete action failed with error {Exception}')
+        return jsonify({'message': 'Person does not exist'}), 404
 
 
-@app.errorhandler(422)
-def error_handler(err):
-    headers = err.data.get('headers', None)
-    messages = err.data.get('messages', ['Invalid request'])
-    if headers:
-        return jsonify({'message': messages}), 400, headers
-    else:
-        return jsonify({'message': messages}), 400
-
+import errors
 
 docs.register(persons_get)
 docs.register(persons_post)

@@ -5,7 +5,7 @@ class PersonSchema(Schema):
     firstname = fields.String(required=True, validate=[validate.Length(max=20)])
     surname = fields.String(required=True, validate=[validate.Length(max=20)])
     birth = fields.Date(required=True)
-    job = fields.String(required=True, validate=[validate.Length(max=20)])
+    job = fields.String(required=False, validate=[validate.Length(max=20)])
     address = fields.String(required=True, validate=[validate.Length(max=20)])
     message = fields.String(dump_only=True)
 

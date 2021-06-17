@@ -27,25 +27,26 @@
     <br>
     <br>
     {% if persons|length > 0 %}
-            <div class="alert alert-info">
-                <table>
+        <div class="alert alert-info">
+            <table class = "table">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Birth</th>
+                    <th scope="col">Job</th>
+                </tr>
+                {% for p in persons %}
                     <tr>
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Birth</th>
-                        <th>Job</th>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ p.firstname }}</td>
+                        <td>{{ p.surname }}</td>
+                        <td>{{ p.birth }}</td>
+                        <td>{{ p.job }}</td>
                     </tr>
-                      {% for p in persons %}
-                        <tr>
-                            <td>{{ p.firstname }}</td>
-                            <td>{{ p.surname }}</td>
-                            <td>{{ p.birth }}</td>
-                            <td>{{ p.job }}</td>
-                        </tr>
-                      {% endfor %}
-                </table>
-            </div>
-
+                {% endfor %}
+            </table>
+        </div>
     {% else %}
          <h3>There are no persons</h3>
     {% endif %}
