@@ -1,7 +1,9 @@
 import json
 import unittest
 from flask_migrate import Migrate
-from app import app, db, Person
+from flask_sqlalchemy import SQLAlchemy
+
+from app import app, Person
 
 
 class TestCase(unittest.TestCase):
@@ -10,11 +12,11 @@ class TestCase(unittest.TestCase):
         app.config['CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/test_db'
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        self.app = app.test_client()
+        db = SQLAlchemy(app)
         Migrate(app, db)
-
         db.create_all()
 
+        self.app = app.test_client()
         self.person1 = Person(
             firstname='TestFirstName',
             surname='TestSurname',
