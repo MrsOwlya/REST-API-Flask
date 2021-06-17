@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+
+name: FlaskGitHubActions
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  my_testing:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: owlya
+          POSTGRES_PASSWORD: sveya
+          POSTGRES_DB: flask_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git clone my repo
+        uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      # Runs a set of commands using the runners shell
+      - name: Run tests
+        run: pytest tests.py
+
+#   my_deploy:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+#     needs: [my_testing]
+#     services:
+#       postgres:
+#         image: postgres:10.8
+#         env:
+#           POSTGRES_USER: owlya
+#           POSTGRES_PASSWORD: sveya
+#           POSTGRES_DB: flask_db
+#         ports:
+#           - 5432:5432
+#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+#     strategy:
+#       max-parallel: 4
+#       matrix:
+#         python-version: [3.8]
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v2
+
+#       # Runs a single command using the runners shell
+#       - name: Deploy to Heroku
+#         run: echo Hello, world!
+
+#       # Runs a set of commands using the runners shell
+#       - name: Run a multi-line script
+#         run: |
+#           echo Add other actions to build,
+#           echo test, and deploy your project.
