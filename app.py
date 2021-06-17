@@ -5,13 +5,17 @@ from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from schemas import PersonSchema, PersonPatchSchema
 from flask_apispec import use_kwargs, marshal_with
+from flask_migrate import Migrate
 import logging
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/flask_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 docs = FlaskApiSpec()
 docs.init_app(app)
