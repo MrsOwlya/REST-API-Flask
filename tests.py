@@ -1,16 +1,11 @@
 import json
 import unittest
-from flask_migrate import Migrate
 from app import app, db, Person
 
 
 class TestCase(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
-        app.config['CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/test_db'
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        Migrate(app, db)
         db.create_all()
 
         self.app = app.test_client()
