@@ -1,1 +1,6 @@
 
+2021-06-18 03:06:26,828:app:WARNING:Person 2 delete action failed with error Class 'builtins.NoneType' is not mapped
+2021-06-18 03:06:27,641:app:WARNING:Person 3000 get action failed with error 404
+2021-06-18 03:06:27,711:app:WARNING:Marshmallow error: <class 'Exception'>
+2021-06-18 03:07:00,852:app:WARNING:Person 3000 get action failed with error 404
+2021-06-18 03:07:00,937:app:WARNING:Marshmallow error: <class 'Exception'>
