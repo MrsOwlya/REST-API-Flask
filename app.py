@@ -12,7 +12,7 @@ from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@0.0.0.0:5432/flask_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/flask_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
