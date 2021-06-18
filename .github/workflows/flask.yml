@@ -22,8 +22,7 @@ jobs:
         env:
           POSTGRES_USER: owlya
           POSTGRES_PASSWORD: sveya
-          POSTGRES_DB: flask_db
-          POSTGRES_TEST_DB: test_db
+          POSTGRES_DB: test_db
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -51,35 +50,35 @@ jobs:
       - name: Run tests
         run: pytest tests.py
 
-#   my_deploy:
-#     # The type of runner that the job will run on
-#     runs-on: ubuntu-latest
-#     needs: [my_testing]
-#     services:
-#       postgres:
-#         image: postgres:10.8
-#         env:
-#           POSTGRES_USER: owlya
-#           POSTGRES_PASSWORD: sveya
-#           POSTGRES_DB: flask_db
-#         ports:
-#           - 5432:5432
-#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#     strategy:
-#       max-parallel: 4
-#       matrix:
-#         python-version: [3.8]
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#       - uses: actions/checkout@v2
+  my_deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: [my_testing]
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: owlya
+          POSTGRES_PASSWORD: sveya
+          POSTGRES_DB: flask_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-#       # Runs a single command using the runners shell
-#       - name: Deploy to Heroku
-#         run: echo Hello, world!
+      # Runs a single command using the runners shell
+      - name: Deploy to Heroku
+       run: echo Hello, world!
 
-#       # Runs a set of commands using the runners shell
-#       - name: Run a multi-line script
-#         run: |
-#           echo Add other actions to build,
-#           echo test, and deploy your project.
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
