@@ -8,7 +8,7 @@ class TestCase(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@0.0.0.0:5432/test_db'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@127.0.0.1:5432/test_db'
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         Migrate(app, db)
         db.create_all()
