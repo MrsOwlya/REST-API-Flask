@@ -85,11 +85,11 @@ def create():
 @app.route('/persons', methods=['GET'])
 @marshal_with(PersonSchema(many=True))
 def persons_get():
-    try:
-        allpersons = Person.query.order_by(Person.id).all()
+    allpersons = Person.query.order_by(Person.id).all()
+    if allpersons is not None:
         return allpersons, 200
-    except Exception as e:
-        logger.warning(f'Persons get action failed with error {e}')
+    else:
+        logger.warning(f'Persons get action failed with error {404}')
         return {'message': 'No persons'}, 404
 
 
