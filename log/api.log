@@ -6,3 +6,10 @@
 2021-06-18 03:07:00,937:app:WARNING:Marshmallow error: <class 'Exception'>
 2021-06-18 18:58:30,608:app:WARNING:Person 3000 get action failed with error 404
 2021-06-18 18:58:30,700:app:WARNING:Marshmallow error: <class 'Exception'>
+2021-06-19 23:55:23,621:app:WARNING:Person 3000 get action failed with error 404
+2021-06-19 23:55:23,687:app:WARNING:Marshmallow error: <class 'Exception'>
+2021-06-19 23:55:58,106:app:WARNING:Person 2 delete action failed with error Class 'builtins.NoneType' is not mapped
+2021-06-19 23:55:58,487:app:WARNING:Person 3000 get action failed with error 404
+2021-06-19 23:55:58,566:app:WARNING:Marshmallow error: <class 'Exception'>
+2021-06-19 23:56:04,718:app:WARNING:Person 3000 get action failed with error 404
+2021-06-19 23:56:04,790:app:WARNING:Marshmallow error: <class 'Exception'>
