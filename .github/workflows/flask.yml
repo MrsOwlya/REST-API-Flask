@@ -86,5 +86,7 @@ jobs:
           HEROKU_API_TOKEN: a0b8d45b-a93b-4d12-9a1a-957fbf32364b
           HEROKU_APP_NAME: arcane-bayou-05827
         if: github.ref == 'refs/heads/main' && job.status == 'success'
-        run: git push https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
+        run: |
+          git push https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
+          heroku logs --tail -a arcane-bayou-05827
 
