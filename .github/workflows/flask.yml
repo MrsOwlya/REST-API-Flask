@@ -89,4 +89,9 @@ jobs:
         run: |
           git push https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git origin/main:main
           heroku logs --tail -a arcane-bayou-05827
-
+      - name: Run integration tests
+        uses: eskatos/gradle-command-action@v1
+        with:
+          build-root-directory: integration-tests
+          wrapper-directory: integration-tests
+          arguments: clean test -PtargetUrl=https://arcane-bayou-05827.herokuapp.com
