@@ -1,7 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from apispec.ext.marshmallow import MarshmallowPlugin
-from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from schemas import PersonSchema, PersonPatchSchema
 from flask_apispec import use_kwargs, marshal_with
@@ -10,24 +8,13 @@ import logging
 from config import Config
 
 app = Flask(__name__)
-app.config.from_object(Config)
 app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://owlya:sveya@localhost:5432/flask_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 docs = FlaskApiSpec()
 docs.init_app(app)
-app.config.update({
-    'APISPEC_SPEC': APISpec(
-        title='REST-API-Flask',
-        version='v1',
-        openapi_version='2.0',
-        plugins=[MarshmallowPlugin()]
-    ),
-    'APISPEC_SWAGGER_URL': '/swagger/'
-})
 
 from models import Person
 db.create_all()
