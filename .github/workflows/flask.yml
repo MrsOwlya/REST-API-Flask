@@ -20,9 +20,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: flask_db
+          POSTGRES_USER: owlya
+          POSTGRES_PASSWORD: sveya
+          POSTGRES_DB: test_db
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -54,16 +54,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     needs: [my_testing]
-    services:
-      postgres:
-        image: postgres:10.8
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: flask_db
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       max-parallel: 4
       matrix:
@@ -92,3 +82,4 @@ jobs:
           heroku logs --tail -a arcane-bayou-05827
           heroku run flask db init -a arcane-bayou-05827
           heroku run flask db migrate -a arcane-bayou-05827
+          heroku run flask db upgrade -a arcane-bayou-05827
