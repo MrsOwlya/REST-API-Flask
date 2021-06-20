@@ -12,8 +12,6 @@ from config import Config
 app = Flask(__name__)
 app.debug = True
 app.config.from_object(Config)
-if os.environ.get('GITHUB_WORKFLOW'):
-    app.config.update(SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/flask_db'))
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
