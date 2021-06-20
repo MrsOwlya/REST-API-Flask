@@ -5,7 +5,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 
 class Config:
     if os.environ.get('GITHUB_WORKFLOW'):
-        database_path = 'postgresql+psycopg2://{}:{}@{}/{}'.format('postgres', 'postgres', 'localhost:5432', 'flask_db')
+        database_path = "postgres://lhusbwbrroozdo:e304101adc4967768d13ea81ac4f5cd4c2a75806f6249dbb4af6b1014991d391@ec2-50-17-255-120.compute-1.amazonaws.com:5432/d2tcus1l0luhaf"
         SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', database_path)
     else:
         SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://owlya:sveya@localhost:5432/test_db'
