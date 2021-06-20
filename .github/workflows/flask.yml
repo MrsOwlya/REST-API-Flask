@@ -20,8 +20,8 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: owlya
-          POSTGRES_PASSWORD: sveya
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: flask_db
         ports:
           - 5432:5432
@@ -58,8 +58,8 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
-          POSTGRES_USER: owlya
-          POSTGRES_PASSWORD: sveya
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: flask_db
         ports:
           - 5432:5432
