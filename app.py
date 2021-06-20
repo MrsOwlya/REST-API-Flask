@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_apispec.extension import FlaskApiSpec
@@ -10,6 +12,8 @@ from config import Config
 app = Flask(__name__)
 app.debug = True
 app.config.from_object(Config)
+if os.environ.get('GITHUB_WORKFLOW'):
+    app.config.update(SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/flask_db')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
