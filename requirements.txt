@@ -1,9 +1,13 @@
 alembic==1.6.5
 apispec==4.6.0
+appdirs==1.4.4
 attrs==21.2.0
 click==8.0.1
+distlib==0.3.2
+filelock==3.0.12
 Flask==2.0.1
 flask-apispec==0.11.0
+flask-heroku==0.1.9
 flask-marshmallow==0.14.0
 Flask-Migrate==3.0.1
 Flask-SQLAlchemy==2.5.1
@@ -19,6 +23,7 @@ marshmallow==3.12.1
 marshmallow-sqlalchemy==0.26.1
 packaging==20.9
 pluggy==0.13.1
+psycopg2==2.9.1
 psycopg2-binary==2.9.1
 py==1.10.0
 pyparsing==2.4.7
@@ -31,5 +36,6 @@ python-editor==1.0.4
 six==1.16.0
 SQLAlchemy==1.4.18
 toml==0.10.2
+virtualenv==20.4.7
 webargs==8.0.0
 Werkzeug==2.0.1
