@@ -48,7 +48,6 @@ jobs:
           pip install -r requirements.txt
       - name: Make migrations
         run: |
-          flask db init
           flask db migrate
       # Runs a set of commands using the runners shell
       - name: Run tests
