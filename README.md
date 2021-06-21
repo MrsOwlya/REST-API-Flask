@@ -1,7 +1,7 @@
 # REST-API-Flask
 
 Status of last deployment:<br>
-<img src="https://github.com/adv4000/REST-API-Flask/workflows/FlaskGitHubActions/badge.svg?branch=main">
+<img src="https://github.com/MrsOwlya/REST-API-Flask/workflows/FlaskGitHubActions/badge.svg?branch=main">
 
 App: https://arcane-bayou-05827.herokuapp.com
 
